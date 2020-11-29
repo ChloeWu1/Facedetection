@@ -11,7 +11,7 @@ import cv2
 import os
 
 os.environ['KERAS_BACKEND'] = 'tensorflow'
-
+caffe.set_mode_gpu()
 #import plaidml.keras
 #plaidml.keras.install_backend()
 
@@ -84,6 +84,7 @@ def iou(box1,box2):
 
 def show_results(MODE,img,results, img_width, img_height, net_age, net_gender, net_emotion, model_age, model_gender, model_emotion):
 	img_cp = img.copy()
+
 	for i in range(len(results)):
 		x = int(results[i][1])
 		y = int(results[i][2])
@@ -108,9 +109,10 @@ def show_results(MODE,img,results, img_width, img_height, net_age, net_gender, n
 		if ymax>img_height:
 			ymax = img_height
 
-		cv2.rectangle(img_cp,(xmin,ymin),(xmax,ymax),(0,255,0),2)
-		cv2.rectangle(img_cp,(xmin,ymin-20),(xmax,ymin),(125,125,125),-1)
-		cv2.putText(img_cp,results[i][0] + ' : %.2f' % results[i][5],(xmin+5,ymin-7),cv2.FONT_HERSHEY_SIMPLEX,0.5,(0,0,0),1)	
+
+		#cv2.rectangle(img_cp,(xmin,ymin),(xmax,ymax),(0,255,0),2)
+		#cv2.rectangle(img_cp,(xmin,ymin-20),(xmax,ymin),(125,125,125),-1)
+		#cv2.putText(img_cp,results[i][0] + ' : %.2f' % results[i][5],(xmin+5,ymin-7),cv2.FONT_HERSHEY_SIMPLEX,0.5,(0,0,0),1)	
 
 		target_image=img_cp
 		margin=w/4
@@ -141,7 +143,7 @@ def show_results(MODE,img,results, img_width, img_height, net_age, net_gender, n
 
 		IMAGE_SIZE=227
 		IMAGE_SIZE_KERAS=64
-
+		
 		img = cv2.resize(face_image, (IMAGE_SIZE,IMAGE_SIZE))
 		img = np.expand_dims(img, axis=0)
 		img = img - (104,117,123) #BGR mean value of VGG16
@@ -171,7 +173,8 @@ def show_results(MODE,img,results, img_width, img_height, net_age, net_gender, n
 			img = img.transpose((0, 3, 1, 2))
 			gender_revert = False
 
-		cv2.rectangle(target_image, (x2,y2), (x2+w2,y2+h2), color=(0,0,255), thickness=3)
+
+		cv2.rectangle(target_image, (x2,y2), (x2+w2,y2+h2), color=(0,0,255), thickness=2)
 		offset=16
 
 		lines_age=open('words/agegender_age_words.txt').readlines()
@@ -259,7 +262,7 @@ def main(argv):
 	else:
 		print("usage: python agegender_demo.py [caffe/keras/converted] [image(optional)]")
 		sys.exit(1)
-	if(MODE!="caffe" and MODE!="keras" and MODE!="converted"):
+	if(MODE!="caffe" and MODE!="keras" and MODE!="converted" and MODE!="none"):
 		print("Unknown mode "+MODE)
 		sys.exit(1)
 
@@ -288,15 +291,21 @@ def main(argv):
 			model_emotion = load_model(DATASET_ROOT_PATH+'pretrain/fer2013_mini_XCEPTION.102-0.66.hdf5')
 
 	#Detection
+	if(DEMO_IMG==""):
+		cap = cv2.VideoCapture('129.avi')
+
+	count=0
 	while True:
 		#Face Detection
-		cap = cv2.VideoCapture(0)
-		ret, frame = cap.read() #BGR
-		img=frame
-		img = img[...,::-1]  #BGR 2 RGB
-		inputs = img.copy() / 255.0
 		
-		if(DEMO_IMG!=""):
+		if(DEMO_IMG==""):
+			ret, frame = cap.read() #BGR
+			if frame is None:
+				break
+			img=frame
+			img = img[...,::-1]  #BGR 2 RGB
+			inputs = img.copy() / 255.0
+		else:
 			img = caffe.io.load_image(DEMO_IMG) # load the image using caffe io
 			inputs = img
 		
@@ -308,12 +317,15 @@ def main(argv):
 
 		#Age and Gender Detection
 		show_results(MODE,img_cv,results, img.shape[1], img.shape[0], net_age, net_gender, net_emotion, model_age, model_gender, model_emotion)
-
+		print(count)
 		k = cv2.waitKey(1)
 		if k == 27:
 			break
-
-	cap.release()
+		
+		count=count+1
+	print(count)
+	if(DEMO_IMG==""):
+		cap.release()
 	cv2.destroyAllWindows()
 
 if __name__=='__main__':

@@ -376,7 +376,7 @@ def main(argv):
 				frame = cv2.imread(file_name) #BGR
 				if frame is None:
 					break
-				train_or_test, filename_no_ext, filename = file_name
+				train_or_test, filename_no_ext, filename = get_video_parts(file_name)
 				dest = os.path.join(train_or_test, video_id, filename_no_ext + '-face.jpg')
 
 				img=frame

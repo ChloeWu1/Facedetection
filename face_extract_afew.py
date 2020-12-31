@@ -368,8 +368,8 @@ def main(argv):
 		count = 0
 		for video_id in videos:
 			files = glob.glob(os.path.join(train_or_test, video_id, '*.png'))
-			percentage = (count*100)/len(files)
-			print(video_id+")"+str(percentage)+"% "+str(count)+" of "+str(len(files)))
+			percentage = (count*100)/len(videos)
+			print(video_id+")"+str(percentage)+"% "+str(count)+" of "+str(len(videos)))
 			n = 0
 			pbar = tqdm(total=len(files))
 			for file_name in files:

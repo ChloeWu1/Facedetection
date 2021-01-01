@@ -312,7 +312,7 @@ def save_image(MODE,img,results, img_width, img_height, dst):
 		roi = target_image[y2:y2+h2, x2:x2+w2]
 		pil_image = Image.fromarray(roi)
 		pil_image = make_square(pil_image)
-		roi = numpy.array(pil_image) 
+		roi = np.array(pil_image) 
 		#roi=cv2.resize(roi, (254, 254)) 
 		cv2.imwrite(dst, roi)
 		return 1

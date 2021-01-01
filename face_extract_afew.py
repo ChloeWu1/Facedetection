@@ -9,7 +9,7 @@ import numpy as np
 import sys, getopt
 import cv2
 import os
-from os import listdir
+
 import glob
 import os.path
 from subprocess import call
@@ -363,22 +363,32 @@ def main(argv):
 
 	data_file = []
 	folders = ['test', 'train']
-	for train_or_test in folders:
-		videos = [f for f in listdir(train_or_test)]
+	for folder in folders:
+		files = glob.glob(os.path.join(folder, '*'))
 		count = 0
-		for video_id in videos:
-			files = glob.glob(os.path.join(train_or_test, video_id, '*.png'))
-			percentage = (count*100)/len(videos)
-			print(video_id+")"+str(percentage)+"% "+str(count)+" of "+str(len(videos)))
-			n = 0
-			pbar = tqdm(total=len(files))
-			for file_name in files:
-				frame = cv2.imread(file_name) #BGR
+		for video_path in files:
+			percentage = (count*100)/len(files)
+			print(folder+")"+str(percentage)+"% "+str(count)+" of "+str(len(files)))
+			
+			video_parts = get_video_parts(video_path)
+			train_or_test, filename_no_ext, filename = video_parts
+
+			src = os.path.join(train_or_test, filename)
+			cap = cv2.VideoCapture(src)
+
+			n_frames = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
+	
+			dst_folder = os.path.join(train_or_test, filename_no_ext)
+
+			if not os.path.exists(dst_folder):
+				os.makedirs(dst_folder)
+
+			pbar = tqdm(total=n_frames)
+			for n in range(n_frames):
+				ret, frame = cap.read() #BGR
 				if frame is None:
 					break
-				train_or_test, filename_no_ext, filename = get_video_parts(file_name)
-				dest = os.path.join(train_or_test, video_id, filename_no_ext + '-face.jpg')
-
+				dest = os.path.join(train_or_test, filename_no_ext, filename_no_ext + '-'+str(n)+'.jpg')
 				img=frame
 				img = img[...,::-1]  #BGR 2 RGB
 				inputs = img.copy() / 255.0
@@ -391,9 +401,9 @@ def main(argv):
 
 				data_file.append([train_or_test, filename_no_ext, n, withFace])
 				pbar.update(1)
-				n=n+1
 			print("Generated %d frames for %s" % (n, filename_no_ext))
 			count = count +1
+			cap.release()
 			pbar.close()
 
 		with open('data_file_new.csv', 'w') as fout:
@@ -404,7 +414,7 @@ def main(argv):
 def get_video_parts(video_path):
     """Given a full path to a video, return its parts."""
     parts = video_path.split(os.path.sep)
-    filename = parts[2]
+    filename = parts[1]
     filename_no_ext = filename.split('.')[0]
     train_or_test = parts[0]
 

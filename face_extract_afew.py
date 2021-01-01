@@ -376,7 +376,7 @@ def main(argv):
 			src = os.path.join(train_or_test, filename)
 			cap = cv2.VideoCapture(src)
 
-			n_frames = int(cap.get(cv2.CV_CAP_PROP_FRAME_COUNT))
+			n_frames = int(cap.get(cv2.cv.CV_CAP_PROP_FRAME_COUNT))
 	
 			dst_folder = os.path.join(train_or_test, filename_no_ext)
 

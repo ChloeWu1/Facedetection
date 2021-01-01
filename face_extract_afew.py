@@ -9,7 +9,7 @@ import numpy as np
 import sys, getopt
 import cv2
 import os
-
+from PIL import Image
 import glob
 import os.path
 from subprocess import call
@@ -23,6 +23,14 @@ caffe.set_mode_gpu()
 
 from keras.models import load_model
 from keras.preprocessing import image
+
+def make_square(im, min_size=254, fill_color=(0, 0, 0, 0)):
+    x, y = im.size
+    size = max(min_size, x, y)
+    new_im = Image.new('RGBA', (size, size), fill_color)
+    new_im.paste(im, ((size - x) / 2, (size - y) / 2))
+    return new_im
+
 
 def interpret_output(output, img_width, img_height):
 	classes = ["face"]
@@ -302,7 +310,10 @@ def save_image(MODE,img,results, img_width, img_height, dst):
 
 		#cv2.rectangle(target_image, (x2,y2), (x2+w2,y2+h2), color=(0,0,255), thickness=2)
 		roi = target_image[y2:y2+h2, x2:x2+w2]
-		roi=cv2.resize(roi, (254, 254)) 
+		pil_image = Image.fromarray(roi)
+		pil_image = make_square(pil_image)
+		roi = numpy.array(pil_image) 
+		#roi=cv2.resize(roi, (254, 254)) 
 		cv2.imwrite(dst, roi)
 		return 1
 

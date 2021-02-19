@@ -9,33 +9,24 @@ Implement Face detection, and Age and Gender Classification, and Emotion Classif
 
 ## Functions
 
-Face Detection (Darknet , Caffe)
-
-Age Classification (Keras)
-
-Gender Classification (Keras)
-
-Emotion Classification (Keras)
+- Face Detection (Darknet , Caffe)
+- Age Classification (Keras)
+- Gender Classification (Keras)
+- Emotion Classification (Keras)
 
 ## Requirements
 
-Keras2 + Tensorflow
-
-Darknet
-
-Caffe
-
-OpenCV
-
-Python 2.7
-
-Perl
+- Keras2 + Tensorflow
+- Darknet
+- Caffe
+- OpenCV
+- Python 2.7
+- Perl
 
 ## Implement Environment
 
-Mac Pro 2013 (Xeon)
-
-MacOS X 10.12
+- Mac Pro 2013 (Xeon)
+- MacOS X 10.12
 
 # Demo
 
@@ -91,12 +82,8 @@ https://github.com/abars/YoloKerasFaceDetection/blob/master/TRAIN_EXPERIMENTAL.m
 
 # Related Work
 
-<https://github.com/oarriaga/face_classification>
-
-<https://gist.github.com/GilLevi/54aee1b8b0397721aa4b>
-
-<https://www.openu.ac.il/home/hassner/projects/cnn_agegender/>
-
-<https://github.com/dpressel/rude-carnie>
-
-<https://how-old.net/>
+- <https://github.com/oarriaga/face_classification>
+- <https://gist.github.com/GilLevi/54aee1b8b0397721aa4b>
+- <https://www.openu.ac.il/home/hassner/projects/cnn_agegender/>
+- <https://github.com/dpressel/rude-carnie>
+- <https://how-old.net/>

@@ -23,10 +23,6 @@ Implement Face detection, and Age and Gender Classification, and Emotion Classif
 - Python 2.7
 - Perl
 
-## Implement Environment
-
-- Mac Pro 2013 (Xeon)
-- MacOS X 10.12
 
 # Demo
 

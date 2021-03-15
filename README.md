@@ -2,7 +2,7 @@
 
 Implement Face detection, and Age and Gender Classification, and Emotion Classification.
 
-<img src="https://github.com/ChloeWu1/YoloKerasFaceDetect/blob/master/pretrain/demo/demo.jpg" width="50%" height="50%">
+<img src="https://github.com/ChloeWu1/Facedetection/blob/master/pretrain/demo/demo.jpg" width="50%" height="50%">
 (image from wider face dataset)
 
 # Overview
@@ -70,11 +70,11 @@ Here is a run using reference model .
 
 Here is a training tutorial.
 
-https://github.com/abars/YoloKerasFaceDetection/blob/master/TRAIN.md
+https://github.com/ChloeWu1/Facedetection/blob/master/TRAIN.md
 
 Here is a experimental training tutorial.
 
-https://github.com/abars/YoloKerasFaceDetection/blob/master/TRAIN_EXPERIMENTAL.md
+https://github.com/ChloeWu1/Facedetection/blob/master/TRAIN_EXPERIMENTAL.md
 
 # Related Work
 
